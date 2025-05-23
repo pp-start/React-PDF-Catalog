@@ -71,6 +71,8 @@ CREATE TABLE `subcategories` (
 ) ENGINE=InnoDB;
 ```
 
+Or run file createDB.php inside public/php to automatically generate DB with test products.
+
 ### 💻 Running the App
 
 ```bash
