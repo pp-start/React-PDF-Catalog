@@ -6,20 +6,73 @@ class Data{
 
     use Connection;
 
+    protected $dbh;
+
+    public function __construct(){
+
+        $this->dbh = $this->connect(); // Connection with DB
+
+    }
+
+    // Check if there is connection to the DB
+
+    public function checkConnection(){
+
+        if(($this->dbh instanceof PDO)){
+
+            $tables = ['categories', 'products', 'subcategories'];
+
+            $error = 0;
+
+            foreach($tables as $table){
+
+                $stmt = $this->dbh->prepare("SHOW TABLES LIKE :table");
+
+                $stmt->execute([':table' => $table]);
+
+                if($stmt->rowCount() === 0){
+
+                    $error++;
+
+                }
+
+            }
+
+            if($error > 0){
+
+                $response = array("message" => "Tables not found in Database");
+
+                echo json_encode($response);
+
+                return false;
+
+            } else {
+
+                return true;
+
+            }
+
+        } else {
+
+            $response = array('message' => 'No connection to DB');
+
+            echo json_encode($response);
+
+            return false;
+
+        }
+
+    }
+
     public function getCatalogData(){
 
-        $dbh = $this->connect();
-
-        if (!($dbh instanceof PDO)){
-
-            echo json_encode(false);
+        if(!$this->checkConnection()){
 
             return;
 
         }
 
-
-        $stmt_products = $dbh->prepare("SELECT * FROM `products`");
+        $stmt_products = $this->dbh->prepare("SELECT * FROM `products`");
 
         $stmt_products->execute();
 
@@ -28,7 +81,7 @@ class Data{
         $stmt_products->closeCursor();
 
     
-        $stmt_categories = $dbh->prepare("SELECT * FROM `categories`");
+        $stmt_categories = $this->dbh->prepare("SELECT * FROM `categories`");
 
         $stmt_categories->execute();
 
@@ -37,7 +90,7 @@ class Data{
         $stmt_categories->closeCursor();
 
 
-        $stmt_subcategories = $dbh->prepare("SELECT * FROM `subcategories`");
+        $stmt_subcategories = $this->dbh->prepare("SELECT * FROM `subcategories`");
 
         $stmt_subcategories->execute();
 
@@ -46,11 +99,13 @@ class Data{
         $stmt_subcategories->closeCursor();
 
 
-        $response = [
+        $db_data = [
             'products' => !empty($products) ? $products : null,
             'categories' => !empty($categories) ? $categories : null,
             'subcategories' => !empty($subcategories) ? $subcategories : null
         ];
+
+        $response = ['db_data' => $db_data];
 
         echo json_encode($response);
         

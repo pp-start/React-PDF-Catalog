@@ -82,7 +82,7 @@ export default function Main(){
 
     }
 
-    // Pobieranie danych
+    // Downloading data
 
     const [receivedData, setReceivedData] = useState(null);
 
@@ -96,15 +96,29 @@ export default function Main(){
     
             Axios.post('data.php', { request_type }, { timeout: 10000 }).then(function(response){
 
-                if(typeof response.data === 'object' || Array.isArray(response.data)){
+                if(response.data.db_data){
 
-                    setReceivedData(response.data);
+                    const data = response.data.db_data;
+
+                    if(!data.products){
+
+                        setModal({show: true, info: true});
+
+                        setModalMessage('There are no products in database');
+
+                    } else {
+
+                        setReceivedData(response.data.db_data);
+
+                    }
 
                 } else {
 
                     setModal({show: true, info: true});
 
-                    setModalMessage('Wystąpił błąd w trakcie pobierania danych.');
+                    let message = response.data.message ? response.data.message : "There was an error during data download.";
+
+                    setModalMessage(message);
 
                 }
 
@@ -114,7 +128,7 @@ export default function Main(){
 
                 setModal({show: true, info: true});
 
-                setModalMessage('Wystąpił błąd w trakcie pobierania danych.');
+                setModalMessage('There was an error during data download.');
 
             });
     
@@ -160,7 +174,7 @@ export default function Main(){
 
             const organized = products.reduce((acc, item) => {
 
-                // Główne kategorie
+                // Main categories
 
                 let category_id = item.category_id;
 
@@ -182,7 +196,7 @@ export default function Main(){
 
                 const main_index = acc.findIndex(obj => obj.category_id === category_id);
 
-                // Podkategorie
+                // Subcategories
 
                 let subcategory_id = item.subcategory_id;
 
@@ -200,7 +214,7 @@ export default function Main(){
 
                 }
 
-                // Produkty
+                // Products
 
                 const sub_index = acc[main_index].subcategories.findIndex(obj => obj.subcategory_id === subcategory_id);
 
@@ -701,7 +715,7 @@ export default function Main(){
                     {modal.info && 
                         <div className="modal" onClick={(e)=>e.stopPropagation()}>
                             <div className="modal-header">
-                                <h2 className="modal-title">Informacja</h2>
+                                <h2 className="modal-title">Information</h2>
                             </div>
                             <div className="modal-body">
                                 {modalMessage && 
