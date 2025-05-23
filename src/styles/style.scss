@@ -1,0 +1,354 @@
+// General
+
+$bgcolor: linear-gradient(to right, #FCFCCA, #FFFFD4);;
+$textcolor: #222222;
+$fontsize: 16px;
+$border: 3px solid $textcolor;
+$padding: 10px 20px 10px 20px;
+
+@mixin default_text {
+    color: $textcolor;
+    font: {
+        family: 'Roboto';
+        size: $fontsize;
+        weight: 500;
+    }
+}
+
+@mixin text_header {
+    font: {
+        family: 'Roboto';
+        size: 30px;
+        weight: 700;
+    }
+}
+
+@mixin shadow {
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(155, 155, 155, 1);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(155, 155, 155, 1);
+    box-shadow: 0px 0px 10px 0px rgba(155, 155, 155, 1);
+    border-radius: 10px;
+}
+
+@mixin button_shadow {
+    box-shadow: 0px 0px 3px 1px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px 0px 3px 1px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 3px 1px rgba(0,0,0,0.75);  
+}
+
+html {
+    box-sizing: border-box;
+    background: $bgcolor;
+    -webkit-tap-highlight-color:  rgba(255, 255, 255, 0); 
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body {
+    margin: 0;
+    overscroll-behavior: contain;
+}
+
+body a  {
+    text-decoration: none;
+}
+
+#root, #main-container {
+    min-height: 100vh;
+}
+
+#main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: auto;
+}
+
+#main-wrapper  {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+}
+
+// Wersja próbna
+
+canvas  {
+    display: none;
+}
+
+#app-outer-container  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+.app-outer-wrapper  {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    max-width: 700px;
+    padding: 25px;
+    @include shadow();
+    background-color: #f7a738;
+}
+
+.container {
+    margin: 50px auto;
+    width: 500px;
+    text-align: center;
+}
+  
+.progress {
+    padding: 6px;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 6px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
+}
+  
+.progress-bar {	
+    height: 18px;
+    background-color: #ee303c;  
+    border-radius: 4px; 
+    transition: 0.4s linear;  
+    transition-property: width, background-color;    
+}
+
+.progress-striped .progress-bar { 	
+    background-color: #FCBC51; 
+    width: 100%; 
+    background-image: linear-gradient(45deg, rgb(252,163,17) 25%, transparent 25%, transparent 50%, rgb(252,163,17) 50%, rgb(252,163,17) 75%, transparent 75%, transparent); 
+    animation: progressAnimationStrike 4s;
+}
+  
+@keyframes progressAnimationStrike {
+    from { width: 0 }
+    to   { width: 100% }
+}
+  
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+  
+@keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+#button-container  {
+    padding: 25px;
+    padding-top: 50px;
+    text-align: center;
+}
+
+.button-download {
+	display: inline-block;
+	position: relative;
+	padding: 15px 25px;
+	background-color: #333;
+	color: #fff200;
+	font-family: sans-serif;
+	text-decoration: none;
+	font-size: 20px;
+    font-weight: 600;
+	text-align: center;
+	text-indent: 15px;
+    text-transform: uppercase;
+    border: 1px solid #000;
+    border-radius: 5px;
+    @include button_shadow();
+    cursor: pointer;
+}
+
+.button-download:hover {
+	background-color: #fff200;
+	color: #000;
+}
+
+.button-download:before, .button-download:after {
+	content: ' ';
+	display: block;
+	position: absolute;
+	left: 15px;
+	top: 52%;
+}
+
+// Download box shape
+
+.button-download:before {
+	width: 14px;
+	height: 2px;
+	border-style: solid;
+	border-width: 0 2px 2px;
+}
+
+// Download arrow shape
+
+.button-download:after {
+	width: 0;
+	height: 0;
+	margin-left: 3px;
+	margin-top: -7px;
+	border-style: solid;
+	border-width: 4px 4px 0 4px;
+	border-color: transparent;
+	border-top-color: #fff200;
+	animation: downloadArrow 2s linear infinite;
+	animation-play-state: paused;
+}
+
+.button-download:hover:before {
+	border-color: #000;
+}
+
+.button-download:hover:after {
+	border-top-color: #000;
+	animation-play-state: running;
+}
+
+/* keyframes for the download icon anim */
+
+@keyframes downloadArrow {
+
+	0% {
+		margin-top: -7px;
+		opacity: 1;
+	}
+	
+	0.001% {
+		margin-top: -15px;
+		opacity: 0;
+	}
+	
+	50% {
+		opacity: 1;
+	}
+	
+	100% {
+		margin-top: 0;
+		opacity: 0;
+	}
+
+}
+
+// Barcode
+
+.barcode-wrapper  {
+    width: 150px;
+}
+
+.barcode-wrapper svg {
+    max-width: 100%;
+}
+
+// Modal
+
+.modal-overlay  {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(25, 25, 25, 0.6);
+    z-index: 1200;
+}
+
+.modal  {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    padding-bottom: 25px;
+    min-width: 380px;
+    max-width: 95vw;
+    max-height: 90vh;
+    border-radius: 15px;
+}
+
+.modal-title  {
+    @include default_text;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    flex-basis: 80%;
+    margin: 0;
+    text-align: center;
+    color: #fff;
+}
+
+.modal-header  {
+    padding: 25px;
+    background-color: #d0451f;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.modal-header-error  {
+    background-color: #c73f3f;
+}
+
+.modal-body  {
+    overflow-y: auto;
+}
+
+.modal-footer  {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.modal-message-container  {
+    padding: 0px 20px 0px 20px;
+}
+
+// Modal informacyjny
+
+.modal-info-wrapper  {
+    padding: 10px 20px 0px 20px;
+}
+
+.modal-info-text {
+    @include default_text();
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.modal-info-text-margin  {
+    margin: 20px;
+    margin-top: 25px;
+}
+
+.modal-buttons-wrapper  {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.user-top-panel-button  {
+    border: 0;
+    @include default_text();
+    @include button_shadow();
+    font-size: 14px;
+    padding: 8px;
+    background-color: #d0451f;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 5px;
+    margin-left: 25px;
+    margin-right: 25px;
+    cursor: pointer;
+    min-width: 60px;
+}
